@@ -17,8 +17,12 @@ public class ApoGatewayApplication {
     @Bean
     public RouteLocator gatewayRoutes(RouteLocatorBuilder builder){
         return builder.routes()
-                .route("Candidat",r->r.path("/api/**")
-                        .uri("lb://CANDIDAT-SERVICE") )
+                .route("product",r->r.path("/api/**")
+                        .uri("http://localhost:8081") )
+                .route("orders",r->r.path("/api/**")
+                        .uri("http://localhost:8082") )
+                .route("reports",r->r.path("/api/**")
+                        .uri("http://localhost:8083") )
 //                .route("Job", r->r.path("/jobs/**")
 //                        .uri("http://localhost:8082") )
                 .build();
