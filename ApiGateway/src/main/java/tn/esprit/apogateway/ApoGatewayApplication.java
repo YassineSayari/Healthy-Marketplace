@@ -21,8 +21,10 @@ public class ApoGatewayApplication {
                         .uri("http://localhost:8081") )
                 .route("orders",r->r.path("/api/**")
                         .uri("http://localhost:8082") )
-                .route("reports",r->r.path("/api/**")
+                .route("reviewandreports",r->r.path("/api/**")
                         .uri("http://localhost:8083") )
+                .route("delivery",r->r.path("/api/**")
+                        .uri("http://localhost:3000") )
 //                .route("Job", r->r.path("/jobs/**")
 //                        .uri("http://localhost:8082") )
                 .build();

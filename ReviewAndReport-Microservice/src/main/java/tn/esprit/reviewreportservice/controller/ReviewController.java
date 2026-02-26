@@ -14,15 +14,38 @@ public class ReviewController {
     @Autowired
     private ReviewService reviewService;
 
+    @Autowired
+    private tn.esprit.reviewreportservice.client.ProductRestClient productRestClient;
+
     @PostMapping
     public Review addReview(@RequestBody Review review) {
         return reviewService.addReview(review);
     }
 
-
     @GetMapping("/product/{productId}")
     public List<Review> getReviewsByProduct(@PathVariable Long productId) {
         return reviewService.getReviewsByProduct(productId);
+    }
+
+    // test openfeign
+    @GetMapping("/product/{productId}/details")
+    public Object getProductDetailsWithReviews(@PathVariable Long productId) {
+        tn.esprit.reviewreportservice.dto.ProductDTO product = null;
+        try {
+            product = productRestClient.getProductById(productId);
+        } catch (feign.FeignException.NotFound e) {
+        }
+
+        List<Review> reviews = reviewService.getReviewsByProduct(productId);
+
+        java.util.Map<String, Object> response = new java.util.HashMap<>();
+        if (product != null) {
+            response.put("product", product);
+        } else {
+            response.put("product", "Product with ID " + productId + " not found in ProductService");
+        }
+        response.put("reviews", reviews);
+        return response;
     }
 
     @DeleteMapping("/{id}")
