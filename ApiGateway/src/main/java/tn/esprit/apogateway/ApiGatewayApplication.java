@@ -9,10 +9,10 @@ import org.springframework.context.annotation.Bean;
 
 @EnableDiscoveryClient
 @SpringBootApplication
-public class ApoGatewayApplication {
+public class ApiGatewayApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ApoGatewayApplication.class, args);
+        SpringApplication.run(ApiGatewayApplication.class, args);
     }
     @Bean
     public RouteLocator gatewayRoutes(RouteLocatorBuilder builder){
