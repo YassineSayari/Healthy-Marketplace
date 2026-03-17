@@ -1,0 +1,106 @@
+<div class="pt-24 pb-20">
+  <div class="max-w-7xl mx-auto px-4">
+    <!-- Header -->
+    <div class="text-center mb-12 animate-fadeInDown">
+      <h1 class="text-4xl font-bold text-gray-800 mb-4">Community Forum</h1>
+      <p class="text-gray-600">Join the conversation with fellow organic enthusiasts</p>
+    </div>
+
+    <!-- Create Post -->
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-8 animate-fadeInUp">
+      <div class="flex items-center space-x-4">
+        <img src="assets/user-avatar.jpg" alt="User" class="w-12 h-12 rounded-full">
+        <input type="text" 
+               placeholder="Share your thoughts..." 
+               class="flex-1 border rounded-full px-6 py-3 focus:outline-none 
+                      focus:ring-2 focus:ring-green-500 transition-all">
+        <button class="bg-green-600 text-white px-6 py-3 rounded-full hover:bg-green-700 
+                       transform hover:scale-105 transition-all duration-300">
+          Post
+        </button>
+      </div>
+    </div>
+
+    <!-- Forum Categories -->
+    <div class="flex space-x-4 mb-8 overflow-x-auto pb-2">
+      <button *ngFor="let category of categories"
+              (click)="selectedCategory = category"
+              class="px-6 py-2 rounded-full transition-all duration-300 whitespace-nowrap"
+              [class.bg-green-600]="selectedCategory === category"
+              [class.text-white]="selectedCategory === category"
+              [class.bg-gray-200]="selectedCategory !== category"
+              [class.text-gray-700]="selectedCategory !== category">
+        {{category}}
+      </button>
+    </div>
+
+    <!-- Forum Posts -->
+    <div class="space-y-6">
+      <div *ngFor="let post of filteredPosts; let i = index"
+           class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all 
+                  duration-300 transform hover:-translate-y-1 animate-fadeInUp"
+           [style.animation-delay]="i * 100 + 'ms'">
+        
+        <!-- Post Header -->
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center space-x-3">
+            <img [src]="post.author.avatar" [alt]="post.author.name" 
+                 class="w-10 h-10 rounded-full">
+            <div>
+              <h3 class="font-semibold">{{post.author.name}}</h3>
+              <p class="text-sm text-gray-500">{{post.date}}</p>
+            </div>
+          </div>
+          <span class="px-3 py-1 bg-green-100 text-green-600 rounded-full text-sm">
+            {{post.category}}
+          </span>
+        </div>
+
+        <!-- Post Content -->
+        <h2 class="text-xl font-semibold mb-2">{{post.title}}</h2>
+        <p class="text-gray-600 mb-4">{{post.content}}</p>
+
+        <!-- Post Image -->
+        <img *ngIf="post.image" [src]="post.image" alt="Post image" 
+             class="w-full h-64 object-cover rounded-lg mb-4">
+
+        <!-- Post Actions -->
+        <div class="flex items-center space-x-6 text-gray-500">
+          <button class="flex items-center space-x-2 hover:text-green-600 transition-colors">
+            <i class="far fa-heart"></i>
+            <span>{{post.likes}}</span>
+          </button>
+          <button class="flex items-center space-x-2 hover:text-green-600 transition-colors">
+            <i class="far fa-comment"></i>
+            <span>{{post.comments}}</span>
+          </button>
+          <button class="flex items-center space-x-2 hover:text-green-600 transition-colors">
+            <i class="far fa-share-square"></i>
+            <span>Share</span>
+          </button>
+        </div>
+
+        <!-- Comments Section -->
+        <div *ngIf="post.showComments" class="mt-4 pt-4 border-t">
+          <div *ngFor="let comment of post.commentsList" class="mb-3">
+            <div class="flex items-start space-x-3">
+              <img [src]="comment.avatar" alt="" class="w-8 h-8 rounded-full">
+              <div>
+                <p class="font-semibold">{{comment.name}}</p>
+                <p class="text-gray-600">{{comment.text}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Load More -->
+    <div class="text-center mt-12">
+      <button class="bg-green-600 text-white px-8 py-3 rounded-full hover:bg-green-700 
+                     transform hover:scale-105 transition-all duration-300">
+        Load More Posts
+      </button>
+    </div>
+  </div>
+</div>

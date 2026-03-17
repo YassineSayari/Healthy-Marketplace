@@ -1,0 +1,73 @@
+<div class="pt-24 pb-20">
+  <div class="max-w-7xl mx-auto px-4">
+    <!-- Header -->
+    <div class="text-center mb-12 animate-fadeInDown">
+      <h1 class="text-4xl font-bold text-gray-800 mb-4">Delivery Information</h1>
+      <p class="text-gray-600">Fast and reliable delivery to your doorstep</p>
+    </div>
+
+    <!-- Delivery Options -->
+    <div class="grid md:grid-cols-3 gap-8 mb-16">
+      <div *ngFor="let option of deliveryOptions; let i = index"
+           class="bg-white rounded-xl shadow-lg p-6 text-center transform hover:-translate-y-2 
+                  transition-all duration-300 animate-fadeInUp"
+           [style.animation-delay]="i * 100 + 'ms'">
+        <div class="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+          <i [class]="option.icon + ' text-3xl text-green-600'"></i>
+        </div>
+        <h3 class="text-xl font-semibold mb-2">{{option.name}}</h3>
+        <p class="text-gray-600 mb-2">{{option.time}}</p>
+        <p class="text-2xl font-bold text-green-600">{{option.price}}</p>
+      </div>
+    </div>
+
+    <!-- Delivery Zones Map -->
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-16 animate-fadeInUp">
+      <h2 class="text-2xl font-bold mb-6">Delivery Zones</h2>
+      <div class="relative h-96 bg-gray-100 rounded-lg overflow-hidden">
+        <img src="assets/delivery-map.jpg" alt="Delivery Map" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-green-600 bg-opacity-10"></div>
+        
+        <!-- Zone Markers -->
+        <div class="absolute top-1/4 left-1/4 animate-pulse">
+          <div class="w-4 h-4 bg-green-600 rounded-full"></div>
+        </div>
+        <div class="absolute top-1/2 left-1/2 animate-pulse">
+          <div class="w-4 h-4 bg-green-600 rounded-full"></div>
+        </div>
+        <div class="absolute bottom-1/4 right-1/4 animate-pulse">
+          <div class="w-4 h-4 bg-green-600 rounded-full"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delivery Schedule -->
+    <div class="bg-white rounded-xl shadow-lg p-6 animate-fadeInUp">
+      <h2 class="text-2xl font-bold mb-6">Delivery Schedule</h2>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div>
+          <h3 class="font-semibold text-lg mb-4">Standard Delivery</h3>
+          <div class="space-y-3">
+            <div *ngFor="let time of standardTimes" 
+                 class="flex justify-between items-center p-3 border rounded-lg 
+                        hover:bg-green-50 transition-colors duration-300">
+              <span>{{time.day}}</span>
+              <span class="text-green-600">{{time.slot}}</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3 class="font-semibold text-lg mb-4">Express Delivery</h3>
+          <div class="space-y-3">
+            <div *ngFor="let time of expressTimes" 
+                 class="flex justify-between items-center p-3 border rounded-lg 
+                        hover:bg-green-50 transition-colors duration-300">
+              <span>{{time.day}}</span>
+              <span class="text-green-600">{{time.slot}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,140 @@
+<div class="pt-24 pb-20">
+  <div class="max-w-7xl mx-auto px-4">
+    <!-- Header -->
+    <div class="text-center mb-12 animate-fadeInDown">
+      <h1 class="text-4xl font-bold text-gray-800 mb-4">Customer Reviews</h1>
+      <p class="text-gray-600">What our customers say about us</p>
+    </div>
+
+    <!-- Overall Rating -->
+    <div class="bg-white rounded-xl shadow-lg p-8 mb-12 animate-fadeInUp">
+      <div class="flex flex-col md:flex-row items-center justify-between">
+        <div class="text-center md:text-left mb-6 md:mb-0">
+          <div class="text-5xl font-bold text-green-600 mb-2">4.8</div>
+          <div class="flex text-yellow-400 text-2xl mb-2">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+          </div>
+          <p class="text-gray-600">Based on 2,500+ reviews</p>
+        </div>
+
+        <!-- Rating Bars -->
+        <div class="flex-1 max-w-md">
+          <div *ngFor="let rating of [5,4,3,2,1]" class="flex items-center mb-2">
+            <span class="w-12">{{rating}} stars</span>
+            <div class="flex-1 h-2 bg-gray-200 rounded-full mx-4">
+              <div class="h-full bg-yellow-400 rounded-full" 
+                   [style.width]="getRatingPercentage(rating) + '%'"></div>
+            </div>
+            <span class="w-12">{{getRatingCount(rating)}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Write Review -->
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-8 animate-fadeInUp">
+      <h2 class="text-xl font-semibold mb-4">Write a Review</h2>
+      <form>
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2">Your Rating</label>
+          <div class="flex space-x-2 text-2xl text-gray-400">
+            <i *ngFor="let star of [1,2,3,4,5]"
+               class="far fa-star cursor-pointer hover:text-yellow-400 transition-colors"
+               (mouseenter)="hoverRating = star"
+               (mouseleave)="hoverRating = 0"
+               (click)="selectedRating = star"
+               [class.fas]="star <= (hoverRating || selectedRating)"
+               [class.text-yellow-400]="star <= (hoverRating || selectedRating)"></i>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2">Review Title</label>
+          <input type="text" 
+                 class="w-full border rounded-lg px-4 py-2 focus:outline-none 
+                        focus:ring-2 focus:ring-green-500 transition-all"
+                 placeholder="Summarize your experience">
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2">Your Review</label>
+          <textarea rows="4"
+                    class="w-full border rounded-lg px-4 py-2 focus:outline-none 
+                           focus:ring-2 focus:ring-green-500 transition-all"
+                    placeholder="Tell us about your experience"></textarea>
+        </div>
+
+        <button type="submit"
+                class="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 
+                       transform hover:scale-105 transition-all duration-300">
+          Submit Review
+        </button>
+      </form>
+    </div>
+
+    <!-- Reviews List -->
+    <div class="space-y-6">
+      <div *ngFor="let review of reviews; let i = index"
+           class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all 
+                  duration-300 transform hover:-translate-y-1 animate-fadeInUp"
+           [style.animation-delay]="i * 100 + 'ms'">
+        
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex items-center space-x-3">
+            <img [src]="review.user.avatar" [alt]="review.user.name" 
+                 class="w-12 h-12 rounded-full">
+            <div>
+              <h3 class="font-semibold">{{review.user.name}}</h3>
+              <div class="flex items-center space-x-2">
+                <div class="flex text-yellow-400">
+                  <i *ngFor="let star of [1,2,3,4,5]" 
+                     [class.fas]="star <= review.rating"
+                     [class.far]="star > review.rating"
+                     class="text-sm"></i>
+                </div>
+                <span class="text-sm text-gray-500">{{review.date}}</span>
+              </div>
+            </div>
+          </div>
+          <span class="text-green-600 font-semibold">{{review.product}}</span>
+        </div>
+
+        <h4 class="text-lg font-semibold mb-2">{{review.title}}</h4>
+        <p class="text-gray-600 mb-4">{{review.content}}</p>
+
+        <!-- Review Images -->
+        <div *ngIf="review.images" class="flex space-x-2 mb-4">
+          <img *ngFor="let image of review.images" 
+               [src]="image" 
+               class="w-20 h-20 object-cover rounded-lg cursor-pointer 
+                      hover:opacity-75 transition-opacity">
+        </div>
+
+        <!-- Helpful Button -->
+        <div class="flex items-center space-x-4">
+          <button class="flex items-center space-x-2 text-gray-500 hover:text-green-600 
+                         transition-colors">
+            <i class="far fa-thumbs-up"></i>
+            <span>Helpful ({{review.helpful}})</span>
+          </button>
+          <button class="text-gray-500 hover:text-green-600 transition-colors">
+            <i class="far fa-flag"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex justify-center mt-12 space-x-2">
+      <button *ngFor="let page of [1,2,3,4,5]"
+              class="w-10 h-10 rounded-full border border-gray-300 hover:bg-green-600 
+                     hover:text-white hover:border-green-600 transition-all duration-300">
+        {{page}}
+      </button>
+    </div>
+  </div>
+</div>

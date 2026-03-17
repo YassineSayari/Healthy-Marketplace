@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FarmFresh • Organic Farm & Delivery</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <style>
+    @keyframes scaleX { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+    @keyframes scroll { 0%,100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+    @keyframes float { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-35px) rotate(8deg); } }
+    .animate-scaleX     { animation: scaleX 1.3s ease-out forwards; }
+    .animate-scroll     { animation: scroll 2.5s infinite; }
+    .animate-float      { animation: float 9s infinite ease-in-out; }
+    .animation-delay-1000 { animation-delay: 1s; }
+    .animation-delay-2000 { animation-delay: 2s; }
+    .blur-3xl { filter: blur(64px); }
+    .animate-pulse-slow { animation: pulse 5s cubic-bezier(0.4,0,0.6,1) infinite; }
+  </style>
+</head>
+<body class="bg-gray-50 font-sans antialiased">
+
+  <!-- Progress Bar (static example – add JS for real scroll %) -->
+  <div class="fixed top-0 left-0 w-full h-1 bg-green-200 z-50">
+    <div class="h-full bg-green-600 transition-all duration-300" style="width: 42%;"></div>
+  </div>
+
+  <!-- Mouse glow effect (static center – add JS for mouse follow) -->
+  <div class="fixed inset-0 pointer-events-none z-0 opacity-10"
+       style="background: radial-gradient(circle at 50% 50%, rgba(34,197,94,0.25) 0%, transparent 50%);">
+  </div>
+
+  <!-- Hero -->
+  <section id="hero" class="relative h-screen overflow-hidden text-white">
+    <!-- Video / Image Background -->
+    <div class="absolute inset-0">
+      <!-- You can replace with real loop video from pixabay/vecteezy -->
+      <video autoplay muted loop playsinline class="w-full h-full object-cover">
+        <source src="https://cdn.pixabay.com/video/2023/07/15/171984-841892216_tiny.mp4" type="video/mp4">
+        <!-- Fallback image -->
+        <img src="https://images.unsplash.com/photo-1500595046743-ee5a8a800ec2?w=1600" alt="Organic farm" class="w-full h-full object-cover">
+      </video>
+      <div class="absolute inset-0 bg-gradient-to-r from-black/65 via-black/45 to-black/30"></div>
+    </div>
+
+    <!-- Floating blurred elements -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="absolute top-20 left-10 w-40 h-40 bg-green-500/25 rounded-full blur-3xl animate-pulse animate-float"></div>
+      <div class="absolute bottom-20 right-10 w-64 h-64 bg-green-400/25 rounded-full blur-3xl animate-pulse animate-float animation-delay-2000"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="relative z-10 h-full flex items-center">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl">
+          <div class="inline-flex items-center bg-white/20 backdrop-blur-md rounded-full px-5 py-3 mb-8 animate-bounce">
+            <span class="w-3 h-3 bg-green-400 rounded-full animate-ping mr-3"></span>
+            <span class="text-sm font-medium">Farm Fresh • Certified Organic</span>
+          </div>
+
+          <h1 class="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
+            <span class="block">Purely Organic</span>
+            <span class="text-green-400 relative inline-block">
+              From Farm to You
+              <span class="absolute -bottom-3 left-0 w-full h-1.5 bg-green-400 origin-left scale-x-0 animate-scaleX"></span>
+            </span>
+          </h1>
+
+          <p class="text-xl md:text-2xl text-gray-100 mb-10 max-w-2xl">
+            Fresh, seasonal, locally grown produce and goods — delivered straight to your door with care.
+          </p>
+
+          <div class="flex flex-wrap gap-5">
+            <a href="#products" class="group relative overflow-hidden bg-green-600 text-white px-9 py-5 rounded-full text-xl font-semibold transition-all hover:shadow-2xl hover:scale-105">
+              <span class="relative z-10">Shop Now</span>
+              <span class="absolute inset-0 bg-green-700 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+            </a>
+            <button class="group flex items-center gap-3 bg-white/20 backdrop-blur-md px-9 py-5 rounded-full text-xl font-semibold hover:bg-white/30 transition-all">
+              <i class="fas fa-play group-hover:scale-110 transition-transform"></i>
+              Watch Video
+            </button>
+          </div>
+
+          <div class="flex gap-12 mt-16">
+            <div class="text-center">
+              <div class="text-4xl font-bold">15,000+</div>
+              <div class="text-green-200 text-sm">Happy Customers</div>
+            </div>
+            <div class="text-center">
+              <div class="text-4xl font-bold">4.9</div>
+              <div class="text-green-200 text-sm">Rating</div>
+            </div>
+            <div class="text-center">
+              <div class="text-4xl font-bold">24h</div>
+              <div class="text-green-200 text-sm">Delivery</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide dots (static) -->
+    <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-4 z-20">
+      <span class="w-4 h-4 rounded-full bg-white shadow-lg"></span>
+      <span class="w-3 h-3 rounded-full bg-white/60"></span>
+      <span class="w-3 h-3 rounded-full bg-white/60"></span>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-12 right-10 animate-bounce">
+      <div class="w-7 h-11 border-2 border-white rounded-full flex justify-center">
+        <div class="w-1.5 h-4 bg-white rounded-full mt-2 animate-scroll"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section id="categories" class="py-24 bg-gradient-to-b from-gray-50 to-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <span class="text-green-600 font-semibold uppercase tracking-wider text-sm">Categories</span>
+        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mt-3">Shop by Category</h2>
+        <p class="text-gray-600 mt-4 text-lg max-w-3xl mx-auto">Discover our wide selection of fresh, organic, and sustainably sourced products.</p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+        <a href="#" class="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+          <img src="https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=800" alt="Vegetables" class="w-full h-52 object-cover group-hover:scale-110 transition-transform duration-700">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+          <div class="absolute bottom-6 left-6 text-white">
+            <i class="fas fa-carrot text-4xl mb-3 block group-hover:scale-110 transition-transform"></i>
+            <h3 class="text-xl font-bold">Vegetables</h3>
+            <p class="text-sm text-gray-200">150+ items</p>
+          </div>
+        </a>
+
+        <a href="#" class="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+          <img src="https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?w=800" alt="Fruits" class="w-full h-52 object-cover group-hover:scale-110 transition-transform duration-700">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+          <div class="absolute bottom-6 left-6 text-white">
+            <i class="fas fa-apple-whole text-4xl mb-3 block group-hover:scale-110 transition-transform"></i>
+            <h3 class="text-xl font-bold">Fruits</h3>
+            <p class="text-sm text-gray-200">110+ items</p>
+          </div>
+        </a>
+
+        <!-- Add 4 more similar cards: Dairy, Eggs, Grains, Herbs, etc. -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products (static example cards) -->
+  <section id="products" class="py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <span class="text-green-600 font-semibold uppercase tracking-wider text-sm">Products</span>
+        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mt-3">Featured Products</h2>
+        <p class="text-gray-600 mt-4 text-lg max-w-3xl mx-auto">Our hand-selected favorites — fresh, organic, and full of flavor.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Example product card (repeat 4–8 times) -->
+        <div class="group relative bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+          <div class="relative h-64 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1607305387299-a3d9611cd469?w=800" alt="Organic Tomatoes" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <span class="bg-white text-gray-900 px-8 py-4 rounded-full font-semibold">Quick View</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2">Organic Heirloom Tomatoes</h3>
+            <div class="flex items-center mb-3">
+              <div class="flex text-yellow-400 text-sm">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+              </div>
+              <span class="text-gray-500 text-sm ml-2">(128)</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="text-2xl font-bold text-green-600">$4.99 <span class="text-sm text-gray-500">/ kg</span></div>
+              <button class="w-12 h-12 bg-green-600 text-white rounded-full hover:bg-green-700 transition-colors flex items-center justify-center">
+                <i class="fas fa-shopping-cart"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- More product cards here... -->
+      </div>
+
+      <div class="text-center mt-16">
+        <a href="#" class="inline-flex items-center gap-3 bg-green-600 text-white px-10 py-5 rounded-full text-lg font-semibold hover:bg-green-700 transition-all hover:shadow-2xl hover:scale-105">
+          View All Products <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="py-24 bg-gradient-to-r from-green-700 to-emerald-600 text-white">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <i class="fas fa-envelope-open-text text-7xl text-green-200 mb-8 animate-bounce"></i>
+      <h2 class="text-4xl md:text-5xl font-bold mb-6">Join Our Farm Family</h2>
+      <p class="text-xl text-green-100 mb-10 max-w-2xl mx-auto">
+        Subscribe for 10% off your first order and get weekly updates on fresh arrivals & special offers.
+      </p>
+      <form class="max-w-lg mx-auto flex flex-col sm:flex-row gap-4">
+        <input type="email" placeholder="Enter your email" class="flex-1 px-8 py-5 rounded-full text-gray-900 focus:outline-none focus:ring-4 focus:ring-green-300 shadow-lg">
+        <button type="submit" class="px-12 py-5 bg-white text-green-700 font-bold rounded-full hover:bg-green-50 transition-all shadow-xl hover:shadow-2xl">
+          Subscribe
+        </button>
+      </form>
+    </div>
+  </section>
+
+</body>
+</html>

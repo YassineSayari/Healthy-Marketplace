@@ -1,0 +1,103 @@
+<div class="pt-24 pb-20">
+  <div class="max-w-7xl mx-auto px-4">
+    <!-- Header -->
+    <div class="text-center mb-12 animate-fadeInDown">
+      <h1 class="text-4xl font-bold text-gray-800 mb-4">Our Products</h1>
+      <p class="text-gray-600">Fresh organic products delivered to your doorstep</p>
+    </div>
+
+    <!-- Filters -->
+    <div class="flex flex-col md:flex-row gap-8 mb-8">
+      <!-- Categories -->
+      <div class="md:w-64 space-y-4">
+        <h3 class="font-semibold text-lg">Categories</h3>
+        <div class="space-y-2">
+          <label *ngFor="let category of categories" 
+                 class="flex items-center space-x-2 cursor-pointer group">
+            <input type="checkbox" 
+                   
+                   class="form-checkbox text-green-600 rounded focus:ring-green-500">
+            <span class="text-gray-700 group-hover:text-green-600 transition-colors">
+              {{category}}
+            </span>
+          </label>
+        </div>
+
+        <!-- Price Range -->
+        <div class="mt-8">
+          <h3 class="font-semibold text-lg mb-4">Price Range</h3>
+          <input type="range" 
+                 min="0" 
+                 max="100" 
+                 [(ngModel)]="priceRange"
+                 class="w-full accent-green-600">
+          <div class="flex justify-between mt-2">
+            <span>$0</span>
+            <span>${{priceRange}}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="flex-1">
+        <!-- Sort and View -->
+        <div class="flex justify-between items-center mb-6">
+          <p class="text-gray-600">Showing {{filteredProducts.length}} products</p>
+          <select class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 
+                        focus:ring-green-500 transition-all">
+            <option>Sort by: Featured</option>
+            <option>Price: Low to High</option>
+            <option>Price: High to Low</option>
+            <option>Newest First</option>
+          </select>
+        </div>
+
+        <!-- Products -->
+        <div class="grid md:grid-cols-3 gap-6">
+          <div *ngFor="let product of filteredProducts; let i = index"
+               class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl 
+                      transition-all duration-300 transform hover:-translate-y-2 
+                      animate-fadeInUp" 
+               [style.animation-delay]="i * 50 + 'ms'">
+            <div class="relative overflow-hidden group">
+              <img [src]="product.image" [alt]="product.name" 
+                   class="w-full h-48 object-cover transform group-hover:scale-110 
+                          transition-transform duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent 
+                          opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+              <button (click)="addToCart(product)"
+                      class="absolute bottom-4 right-4 bg-green-600 text-white p-3 rounded-full 
+                             opacity-0 group-hover:opacity-100 transform translate-y-10 
+                             group-hover:translate-y-0 transition-all duration-300 
+                             hover:bg-green-700 hover:scale-110">
+                <i class="fas fa-shopping-cart"></i>
+              </button>
+            </div>
+            <div class="p-4">
+              <h3 class="font-semibold text-lg">{{product.name}}</h3>
+              <p class="text-green-600 font-bold">{{product.price}}</p>
+              <div class="flex items-center mt-2">
+                <div class="flex text-yellow-400">
+                  <i *ngFor="let star of [1,2,3,4,5]" 
+                     [class.fas]="star <= product.rating"
+                     [class.far]="star > product.rating"
+                     class="text-sm"></i>
+                </div>
+                <span class="text-sm text-gray-500 ml-2">({{product.reviews}})</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex justify-center mt-12 space-x-2">
+          <button *ngFor="let page of [1,2,3,4,5]"
+                  class="w-10 h-10 rounded-full border border-gray-300 hover:bg-green-600 
+                         hover:text-white hover:border-green-600 transition-all duration-300">
+            {{page}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
