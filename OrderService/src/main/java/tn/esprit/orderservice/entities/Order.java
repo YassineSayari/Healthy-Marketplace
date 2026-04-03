@@ -3,6 +3,7 @@ package tn.esprit.orderservice.entities;
 
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -17,7 +18,7 @@ public class Order {
     private Long id;
 
     @Column(nullable = false)
-    private Long userId;
+    private String userId;
 
     @Column(nullable = false)
     private Double totalPrice;
@@ -29,6 +30,7 @@ public class Order {
     private LocalDateTime createdAt;
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private Payment payment;
 
     public Long getId() {
@@ -39,11 +41,11 @@ public class Order {
         this.id = id;
     }
 
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

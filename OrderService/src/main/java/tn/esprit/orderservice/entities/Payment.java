@@ -1,6 +1,8 @@
 package tn.esprit.orderservice.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 
@@ -15,6 +17,7 @@ public class Payment {
 
     @OneToOne
     @JoinColumn(name = "order_id", nullable = false)
+    @JsonBackReference
     private Order order;
 
     @Column(nullable = false)

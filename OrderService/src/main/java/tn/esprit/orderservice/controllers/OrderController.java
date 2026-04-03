@@ -32,7 +32,7 @@ public class OrderController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<Order> getByUser(@PathVariable Long userId) {
+    public List<Order> getByUser(@PathVariable String userId) {
         return orderService.findByUserId(userId);
     }
 
