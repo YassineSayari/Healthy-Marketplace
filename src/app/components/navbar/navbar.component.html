@@ -1,20 +1,21 @@
 <nav class="bg-white shadow-lg fixed w-full z-50" [class.scrolled]="isScrolled">
   <div class="max-w-7xl mx-auto px-4">
     <div class="flex justify-between items-center h-16">
+
       <!-- Logo -->
       <div class="flex items-center space-x-8">
         <a routerLink="/" class="flex items-center space-x-2 group">
           <i class="fas fa-leaf text-3xl text-green-600 group-hover:rotate-12 transition-transform duration-300"></i>
           <span class="text-2xl font-bold text-green-800">GreenMarket</span>
         </a>
-        
+
         <!-- Desktop Menu -->
         <div class="hidden md:flex space-x-6">
-          <a *ngFor="let item of menuItems" 
+          <a *ngFor="let item of menuItems"
              [routerLink]="item.path"
              routerLinkActive="text-green-600 border-b-2 border-green-600"
              [routerLinkActiveOptions]="{exact: true}"
-             class="nav-link px-3 py-2 text-gray-700 hover:text-green-600 transition-all duration-300 
+             class="nav-link px-3 py-2 text-gray-700 hover:text-green-600 transition-all duration-300
                     border-b-2 border-transparent hover:border-green-600">
             {{item.label}}
           </a>
@@ -26,19 +27,63 @@
         <button class="relative p-2 text-gray-600 hover:text-green-600 transition-colors duration-300">
           <i class="fas fa-search text-xl"></i>
         </button>
-        
+
         <button routerLink="/cart" class="relative p-2 text-gray-600 hover:text-green-600 transition-colors duration-300">
           <i class="fas fa-shopping-cart text-xl"></i>
-          <span class="absolute -top-1 -right-1 bg-green-600 text-white text-xs rounded-full h-5 w-5 
+          <span class="absolute -top-1 -right-1 bg-green-600 text-white text-xs rounded-full h-5 w-5
                        flex items-center justify-center animate-bounce">
             3
           </span>
         </button>
-        
-        <button class="p-2 text-gray-600 hover:text-green-600 transition-colors duration-300">
-          <i class="far fa-user text-xl"></i>
-        </button>
-        
+
+        <!-- Profile Dropdown -->
+        <div class="relative" (clickOutside)="closeProfileDropdown()">
+          <button
+            (click)="toggleProfileDropdown()"
+            class="flex items-center space-x-2 px-3 py-2 rounded-full hover:bg-green-50
+                   text-gray-700 hover:text-green-600 transition-all duration-300">
+            <div class="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center text-white font-semibold text-sm">
+              {{ username!.charAt(0).toUpperCase() }}
+            </div>
+            <span class="hidden md:inline text-sm font-medium">{{ username }}</span>
+            <i class="fas fa-chevron-down text-xs transition-transform duration-200"
+               [class.rotate-180]="profileDropdownOpen"></i>
+          </button>
+
+          <!-- Dropdown Menu -->
+          <div *ngIf="profileDropdownOpen"
+               class="absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-xl border border-gray-100
+                      py-2 animate-fadeIn z-50">
+            <!-- User info header -->
+            <div class="px-4 py-3 border-b border-gray-100">
+              <p class="text-sm font-semibold text-gray-800">{{ username }}</p>
+              <p class="text-xs text-gray-500">Signed in</p>
+            </div>
+
+
+
+            <a routerLink="/orders"
+               (click)="closeProfileDropdown()"
+               class="flex items-center space-x-3 px-4 py-2.5 text-sm text-gray-700
+                      hover:bg-green-50 hover:text-green-600 transition-colors duration-200">
+              <i class="fas fa-box w-4 text-center"></i>
+              <span>My Orders</span>
+            </a>
+
+
+
+            <div class="border-t border-gray-100 mt-2 pt-2">
+              <button
+                (click)="logout()"
+                class="w-full flex items-center space-x-3 px-4 py-2.5 text-sm text-red-500
+                       hover:bg-red-50 transition-colors duration-200">
+                <i class="fas fa-sign-out-alt w-4 text-center"></i>
+                <span>Logout</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
         <!-- Mobile menu button -->
         <button (click)="toggleMobileMenu()" class="md:hidden p-2">
           <i class="fas fa-bars text-2xl text-gray-600"></i>
@@ -48,16 +93,25 @@
   </div>
 
   <!-- Mobile Menu -->
-  <div *ngIf="mobileMenuOpen" 
+  <div *ngIf="mobileMenuOpen"
        class="md:hidden bg-white border-t border-gray-200 animate-slideDown">
     <div class="px-4 py-2 space-y-1">
-      <a *ngFor="let item of menuItems" 
+      <a *ngFor="let item of menuItems"
          [routerLink]="item.path"
          (click)="mobileMenuOpen = false"
-         class="block px-3 py-2 text-gray-700 hover:bg-green-50 hover:text-green-600 
+         class="block px-3 py-2 text-gray-700 hover:bg-green-50 hover:text-green-600
                 rounded-lg transition-all duration-300">
         {{item.label}}
       </a>
+      <hr class="my-2">
+      <a routerLink="/orders" (click)="mobileMenuOpen = false"
+         class="block px-3 py-2 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg">
+        <i class="fas fa-box mr-2"></i> My Orders
+      </a>
+      <button (click)="logout()"
+              class="w-full text-left px-3 py-2 text-red-500 hover:bg-red-50 rounded-lg">
+        <i class="fas fa-sign-out-alt mr-2"></i> Logout
+      </button>
     </div>
   </div>
 </nav>

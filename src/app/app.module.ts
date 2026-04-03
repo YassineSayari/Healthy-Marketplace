@@ -1,20 +1,25 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { NgModule, APP_INITIALIZER } from "@angular/core";
+import { FormsModule } from "@angular/forms";
+import { BrowserModule } from "@angular/platform-browser";
+import { KeycloakService } from "keycloak-angular";
+import { AppRoutingModule } from "./app-routing.module";
+import { AppComponent } from "./app.component";
+import { AuthInterceptor } from "./auth/auth.interceptor";
+import { initializeKeycloak } from "./auth/keycloak.init";
+import { AboutComponent } from "./components/about/about.component";
+import { CartComponent } from "./components/cart/cart.component";
+import { CheckoutComponent } from "./components/checkout/checkout.component";
+import { DeliveryComponent } from "./components/delivery/delivery.component";
+import { FooterComponent } from "./components/footer/footer.component";
+import { ForumComponent } from "./components/forum/forum.component";
+import { HomeComponent } from "./components/home/home.component";
+import { NavbarComponent } from "./components/navbar/navbar.component";
+import { ReviewsComponent } from "./components/reviews/reviews.component";
+import { ShopComponent } from "./components/shop/shop.component";
+import { OrderService } from "./services/order.service";
+import { CommonModule } from "@angular/common";
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { ShopComponent } from './components/shop/shop.component';
-
-import { HomeComponent } from './components/home/home.component';
-import { NavbarComponent } from './components/navbar/navbar.component';
-import { FooterComponent } from './components/footer/footer.component';
-import { ForumComponent } from './components/forum/forum.component';
-import { ReviewsComponent } from './components/reviews/reviews.component';
-import { AboutComponent } from './components/about/about.component';
-import { CartComponent } from './components/cart/cart.component';
-import { CheckoutComponent } from './components/checkout/checkout.component';
-import { DeliveryComponent } from './components/delivery/delivery.component';
-import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -28,15 +33,31 @@ import { FormsModule } from '@angular/forms';
     FooterComponent,
     ForumComponent,
     ReviewsComponent,
-    DeliveryComponent
+    DeliveryComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+     HttpClientModule,
+     CommonModule
     
   ],
-  providers: [],
+   providers: [
+    KeycloakService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
+      multi: true,
+      deps: [KeycloakService]
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },
+    OrderService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

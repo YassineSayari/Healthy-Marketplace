@@ -8,6 +8,7 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
 import { DeliveryComponent } from './components/delivery/delivery.component';
 import { ForumComponent } from './components/forum/forum.component';
 import { ReviewsComponent } from './components/reviews/reviews.component';
+import { MyOrdersComponent } from './components/my-orders/my-orders.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -18,6 +19,8 @@ const routes: Routes = [
   { path: 'delivery', component: DeliveryComponent },
   { path: 'forum', component: ForumComponent },
   { path: 'reviews', component: ReviewsComponent },
+    { path: 'orders', component: MyOrdersComponent },
+
   { path: '**', redirectTo: '' }
 ];
 
