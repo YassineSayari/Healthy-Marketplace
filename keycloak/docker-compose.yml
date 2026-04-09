@@ -15,7 +15,7 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: admin
 
     ports:
-      - "9999:8080"
+      - "9090:8080"
 
     depends_on:
       - db

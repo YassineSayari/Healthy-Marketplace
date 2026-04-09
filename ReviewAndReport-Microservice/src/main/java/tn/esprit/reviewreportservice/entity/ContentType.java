@@ -3,5 +3,6 @@ package tn.esprit.reviewreportservice.entity;
 public enum ContentType {
     REVIEW,
     PRODUCT,
-    COMMENT
+    COMMENT,
+    FORUM_POST
 }
