@@ -210,5 +210,11 @@
 
       </div>
     </div>
+
+    <!-- Product Reviews Section -->
+    <div *ngIf="product && !loading" class="mt-20">
+      <app-reviews [productId]="product.id"></app-reviews>
+    </div>
+
   </div>
 </div>

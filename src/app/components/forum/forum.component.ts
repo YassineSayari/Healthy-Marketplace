@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CreatePostRequest, ForumComment, Post } from '../../models/forum.model';
 import { ForumService } from '../../services/forum.service';
-
+import { ReviewReportService } from '../../services/review-report.service';
 
 @Component({
   selector: 'app-forum',
@@ -27,7 +27,10 @@ export class ForumComponent implements OnInit {
   editTitle = '';
   editContent = '';
 
-  constructor(private forumService: ForumService) {}
+  constructor(
+    private forumService: ForumService,
+    private reviewReportService: ReviewReportService
+  ) {}
 
   ngOnInit(): void {
     this.loadPosts();
@@ -172,5 +175,31 @@ export class ForumComponent implements OnInit {
   getInitials(username: string): string {
     if (!username) return '?';
     return username.slice(0, 2).toUpperCase();
+  }
+
+  reportPost(post: Post): void {
+    const reason = prompt('Why are you reporting this post?');
+    if (!reason) return;
+    this.reviewReportService.reportContent({
+      contentId: post.id,
+      contentType: 'FORUM_POST',
+      reason: reason
+    }).subscribe({
+      next: () => alert('Post reported successfully.'),
+      error: () => alert('Failed to report post.')
+    });
+  }
+
+  reportComment(post: Post, comment: ForumComment): void {
+    const reason = prompt('Why are you reporting this comment?');
+    if (!reason) return;
+    this.reviewReportService.reportContent({
+      contentId: comment.id,
+      contentType: 'COMMENT',
+      reason: reason
+    }).subscribe({
+      next: () => alert('Comment reported successfully.'),
+      error: () => alert('Failed to report comment.')
+    });
   }
 }
