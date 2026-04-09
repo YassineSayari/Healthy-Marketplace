@@ -12,6 +12,8 @@ import { MyOrdersComponent } from './components/my-orders/my-orders.component';
 import { ProductDetailComponent } from './components/product-details/product-detail.component';
 import { adminGuard } from './auth/admin.guard';
 import { AdminDashboardComponent,  } from './admin/dashboard/dashboard.component';
+import { NutritionProfileComponent } from './components/nutrition-profile/nutrition-profile.component';
+import { MealPlanComponent } from './components/meal-plan/meal-plan.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -24,6 +26,8 @@ const routes: Routes = [
   { path: 'reviews', component: ReviewsComponent },
     { path: 'orders', component: MyOrdersComponent },
   { path: 'shop/:id', component: ProductDetailComponent },
+  { path: 'nutrition-profile', component: NutritionProfileComponent },
+  { path: 'meal-plans', component: MealPlanComponent },
   {path:'admin',component:AdminDashboardComponent, canActivate: [adminGuard]},
   { path: '**', redirectTo: '' }
 ];

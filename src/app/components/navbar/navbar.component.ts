@@ -17,6 +17,8 @@ export class NavbarComponent implements OnInit {
   menuItems = [
     { path: '/', label: 'Home' },
     { path: '/shop', label: 'Shop' },
+    { path: '/nutrition-profile', label: 'Nutrition' },
+    { path: '/meal-plans', label: 'Meal Plans' },
     { path: '/about', label: 'About' },
     { path: '/forum', label: 'Forum' },
     { path: '/reviews', label: 'Reviews' },
