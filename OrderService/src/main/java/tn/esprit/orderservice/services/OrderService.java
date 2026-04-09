@@ -45,9 +45,29 @@ public class OrderService {
         }
 
         if (order.getPayment() != null) {
+            // Critical: Link back to the order
             order.getPayment().setOrder(order);
+
             if (order.getPayment().getPaymentDate() == null) {
                 order.getPayment().setPaymentDate(LocalDateTime.now());
+            }
+
+            if (order.getId() != null) {
+                Optional<Order> existingOpt = orderRepository.findById(order.getId());
+                if (existingOpt.isPresent()) {
+                    Order existing = existingOpt.get();
+                    if (existing.getPayment() != null && order.getPayment().getId() == null) {
+                        Payment existingPayment = existing.getPayment();
+                        existingPayment.setAmount(order.getPayment().getAmount());
+                        existingPayment.setMethod(order.getPayment().getMethod());
+                        existingPayment.setPaymentStatus(order.getPayment().getPaymentStatus());
+                        existingPayment.setPaymentDate(order.getPayment().getPaymentDate() != null
+                                ? order.getPayment().getPaymentDate()
+                                : LocalDateTime.now());
+
+                        order.setPayment(existingPayment);
+                    }
+                }
             }
         }
 

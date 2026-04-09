@@ -5,6 +5,7 @@ package tn.esprit.orderservice.controllers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.orderservice.entities.Order;
+import tn.esprit.orderservice.entities.Payment;
 import tn.esprit.orderservice.services.OrderService;
 
 import java.util.List;
@@ -42,16 +43,36 @@ public class OrderController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Order> update(@PathVariable Long id, @RequestBody Order order) {
+    public ResponseEntity<Order> update(@PathVariable Long id, @RequestBody Order incomingOrder) {
         return orderService.findById(id)
                 .map(existing -> {
-                    existing.setUserId(order.getUserId());
-                    existing.setTotalPrice(order.getTotalPrice());
-                    existing.setStatus(order.getStatus());
-                    // createdAt usually not updated
-                    if (order.getPayment() != null) {
-                        existing.setPayment(order.getPayment());
+                    // Update simple fields on Order
+                    existing.setUserId(incomingOrder.getUserId());
+                    existing.setTotalPrice(incomingOrder.getTotalPrice());
+                    existing.setStatus(incomingOrder.getStatus());
+                    // Do NOT update createdAt
+
+                    // Handle Payment safely - NEVER just set a new object
+                    if (incomingOrder.getPayment() != null) {
+                        Payment incomingPayment = incomingOrder.getPayment();
+
+                        if (existing.getPayment() == null) {
+                            // First time adding payment
+                            Payment newPayment = new Payment();
+                            newPayment.setOrder(existing);
+                            existing.setPayment(newPayment);
+                        }
+
+                        Payment paymentToUpdate = existing.getPayment();
+
+                        paymentToUpdate.setAmount(incomingPayment.getAmount());
+                        paymentToUpdate.setMethod(incomingPayment.getMethod());
+                        paymentToUpdate.setPaymentStatus(incomingPayment.getPaymentStatus());
+                        if (incomingPayment.getPaymentDate() != null) {
+                            paymentToUpdate.setPaymentDate(incomingPayment.getPaymentDate());
+                        }
                     }
+
                     return ResponseEntity.ok(orderService.save(existing));
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());

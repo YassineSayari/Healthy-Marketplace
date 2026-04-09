@@ -19,10 +19,10 @@ public class ApiGatewayApplication {
     @Bean
     public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route("product", r -> r.path("/api/products/**")
+                .route("product", r -> r.path("/api/products/**" , "/api/categories")
                         .filters(f -> f.dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_UNIQUE")
                                 .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_UNIQUE"))
-                        .uri("http://localhost:8081"))
+                        .uri("http://localhost:8083"))
 
                 .route("orders", r -> r.path("/api/orders/**", "/api/payments/**")
                         .filters(f -> f.dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_UNIQUE")
