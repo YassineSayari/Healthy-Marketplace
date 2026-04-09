@@ -9,6 +9,9 @@ import { DeliveryComponent } from './components/delivery/delivery.component';
 import { ForumComponent } from './components/forum/forum.component';
 import { ReviewsComponent } from './components/reviews/reviews.component';
 import { MyOrdersComponent } from './components/my-orders/my-orders.component';
+import { ProductDetailComponent } from './components/product-details/product-detail.component';
+import { adminGuard } from './auth/admin.guard';
+import { AdminDashboardComponent,  } from './admin/dashboard/dashboard.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -20,7 +23,8 @@ const routes: Routes = [
   { path: 'forum', component: ForumComponent },
   { path: 'reviews', component: ReviewsComponent },
     { path: 'orders', component: MyOrdersComponent },
-
+  { path: 'shop/:id', component: ProductDetailComponent },
+  {path:'admin',component:AdminDashboardComponent, canActivate: [adminGuard]},
   { path: '**', redirectTo: '' }
 ];
 

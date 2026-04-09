@@ -1,0 +1,435 @@
+$green: #16a34a;
+$green-light: #f0fdf4;
+$green-mid: #dcfce7;
+$green-dark: #15803d;
+$border: #e5e7eb;
+$text: #111827;
+$muted: #6b7280;
+$bg: #f9fafb;
+$red: #dc2626;
+$red-light: #fef2f2;
+$radius: 12px;
+$radius-sm: 8px;
+
+.forum-wrapper {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+// ─── Header ────────────────────────────────────────────────
+.forum-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 2rem;
+
+  .header-icon {
+    width: 52px;
+    height: 52px;
+    background: $green-mid;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $green-dark;
+    flex-shrink: 0;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $text;
+    margin: 0;
+  }
+
+  .header-sub {
+    font-size: 0.875rem;
+    color: $muted;
+    margin: 2px 0 0;
+  }
+
+  .btn-refresh {
+    margin-left: auto;
+    background: none;
+    border: 1px solid $border;
+    border-radius: $radius-sm;
+    padding: 8px;
+    cursor: pointer;
+    color: $muted;
+    display: flex;
+    align-items: center;
+    transition: all 0.15s;
+
+    &:hover { background: $bg; color: $green; border-color: $green; }
+  }
+}
+
+// ─── Error bar ─────────────────────────────────────────────
+.error-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: $red-light;
+  color: $red;
+  border: 1px solid #fecaca;
+  border-radius: $radius-sm;
+  padding: 10px 14px;
+  font-size: 0.875rem;
+  margin-bottom: 1.25rem;
+
+  button {
+    margin-left: auto;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: $red;
+    font-size: 1rem;
+    padding: 0;
+    line-height: 1;
+  }
+}
+
+// ─── Shared inputs ─────────────────────────────────────────
+.input-field {
+  width: 100%;
+  border: 1px solid $border;
+  border-radius: $radius-sm;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  color: $text;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+  background: white;
+
+  &:focus { border-color: $green; box-shadow: 0 0 0 3px rgba($green, 0.1); }
+  &::placeholder { color: #9ca3af; }
+}
+
+.textarea-field {
+  @extend .input-field;
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+.comment-textarea { min-height: 60px; }
+
+// ─── Create Card ───────────────────────────────────────────
+.create-card {
+  background: white;
+  border: 1px solid $border;
+  border-radius: $radius;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+
+  .create-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+
+  .create-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: $muted;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .create-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .char-count { font-size: 0.78rem; color: #9ca3af; }
+  }
+}
+
+// ─── Avatar ────────────────────────────────────────────────
+.avatar-circle {
+  width: 38px;
+  height: 38px;
+  background: $green-mid;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: $green-dark;
+  flex-shrink: 0;
+
+  &.create-avatar { background: #f3f4f6; color: $muted; }
+  &.avatar-sm { width: 30px; height: 30px; font-size: 0.7rem; }
+}
+
+// ─── Buttons ───────────────────────────────────────────────
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: $green;
+  color: white;
+  border: none;
+  border-radius: $radius-sm;
+  padding: 9px 18px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &:hover:not(:disabled) { background: $green-dark; }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+  &.btn-sm { padding: 6px 14px; font-size: 0.82rem; }
+}
+
+.btn-ghost {
+  background: none;
+  border: 1px solid $border;
+  border-radius: $radius-sm;
+  padding: 9px 16px;
+  font-size: 0.875rem;
+  color: $muted;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &:hover { background: $bg; color: $text; }
+  &.btn-sm { padding: 6px 12px; font-size: 0.82rem; }
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  border-radius: 6px;
+  padding: 5px;
+  cursor: pointer;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  transition: all 0.15s;
+
+  &:hover { background: $bg; color: $text; }
+  &.btn-danger:hover { background: $red-light; color: $red; }
+  &.btn-xs { padding: 3px; }
+}
+
+// ─── Posts ─────────────────────────────────────────────────
+.posts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.post-card {
+  background: white;
+  border: 1px solid $border;
+  border-radius: $radius;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  transition: box-shadow 0.15s;
+
+  &:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.post-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+  .post-author {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: $text;
+  }
+
+  .post-date {
+    font-size: 0.78rem;
+    color: $muted;
+  }
+}
+
+.post-menu {
+  display: flex;
+  gap: 4px;
+}
+
+.post-body {
+  margin-bottom: 14px;
+
+  .post-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: $text;
+    margin: 0 0 6px;
+    line-height: 1.4;
+  }
+
+  .post-content {
+    font-size: 0.9rem;
+    color: #374151;
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+// ─── Actions ───────────────────────────────────────────────
+.post-actions {
+  display: flex;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid #f3f4f6;
+  margin-bottom: 0;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid $border;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 0.82rem;
+  color: $muted;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &:hover { border-color: $green; color: $green; background: $green-light; }
+  &.active { border-color: $green; color: $green; background: $green-light; }
+}
+
+// ─── Comments ──────────────────────────────────────────────
+.comment-input-area {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.comment-input-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.comment-submit-row {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.comments-section {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f3f4f6;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.comment-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.comment-bubble {
+  flex: 1;
+  background: $bg;
+  border-radius: $radius-sm;
+  padding: 10px 12px;
+
+  .comment-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+
+  .comment-author {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: $text;
+  }
+
+  .comment-date {
+    font-size: 0.75rem;
+    color: $muted;
+  }
+
+  .comment-text {
+    font-size: 0.875rem;
+    color: #374151;
+    margin: 0;
+    line-height: 1.5;
+  }
+}
+
+.comments-loading {
+  display: flex;
+  justify-content: center;
+  padding: 12px 0;
+}
+
+.no-comments {
+  text-align: center;
+  font-size: 0.85rem;
+  color: $muted;
+  padding: 8px 0;
+}
+
+// ─── Edit mode ─────────────────────────────────────────────
+.edit-mode {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+// ─── Loading / Empty ───────────────────────────────────────
+.loading-state, .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 3rem 0;
+  color: $muted;
+  font-size: 0.9rem;
+}
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  border: 2px solid $green-mid;
+  border-top-color: $green;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+
+  &.spinner-sm { width: 18px; height: 18px; }
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }

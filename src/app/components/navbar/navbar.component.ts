@@ -1,10 +1,13 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { AuthService } from '../../auth/auth.service';
+import { Product } from '../../models/product.model';
+interface CartItem extends Product { quantity: number; }
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html'
 })
+
 export class NavbarComponent implements OnInit {
   isScrolled = false;
   mobileMenuOpen = false;
@@ -19,7 +22,16 @@ export class NavbarComponent implements OnInit {
     { path: '/reviews', label: 'Reviews' },
     { path: '/delivery', label: 'Delivery' }
   ];
+cartItemCount: any;
 
+  cartItems: CartItem[] = [];
+
+
+  loadCart(): void {
+    const saved = localStorage.getItem('cart');
+    this.cartItems = saved ? JSON.parse(saved) : [];
+    this.cartItemCount = this.cartItems.reduce((s, i) => s + i.quantity, 0);
+  }
   constructor(private authService: AuthService) {}
 
 async ngOnInit(): Promise<void> {
@@ -28,6 +40,8 @@ async ngOnInit(): Promise<void> {
       this.username = profile.username;
       console.log('Logged in username:', this.username);
     }
+        this.loadCart();
+
   }
 
 

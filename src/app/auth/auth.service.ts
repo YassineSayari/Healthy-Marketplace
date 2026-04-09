@@ -10,7 +10,7 @@ export class AuthService {
     return this.keycloak.getToken();
   }
 
-  getUserProfile() {
+  async getUserProfile() {
     return this.keycloak.loadUserProfile();
   }
 
@@ -29,5 +29,8 @@ export class AuthService {
 
   logout(): void {
     this.keycloak.logout('http://localhost:4200');
+  }
+  isAdmin():boolean {
+ return this.keycloak.isUserInRole('admin');
   }
 }

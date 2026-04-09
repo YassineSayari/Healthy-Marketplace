@@ -1,271 +1,140 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { OrderRequest } from '../../models/order.model';
 import { OrderService } from '../../services/order.service';
 import { AuthService } from '../../auth/auth.service';
+import { Product } from '../../models/product.model';
 
+interface CartItem extends Product { quantity: number; }
 
-interface CartItem {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-  image: string;
-}
-
-interface ShippingMethod {
-  id: string;
-  name: string;
-  price: number;
-  days: string;
-}
-
-interface PaymentMethod {
-  id: string;
-  name: string;
-  icon: string;
-}
-
-interface ShippingAddress {
-  firstName: string;
-  lastName: string;
-  email: string;
-  address: string;
-  city: string;
-  state: string;
-  zip: string;
-  phone: string;
-}
-
-interface BillingAddress {
-  sameAsShipping: boolean;
-  firstName: string;
-  lastName: string;
-  address: string;
-  city: string;
-  state: string;
-  zip: string;
-}
-
-interface PaymentInfo {
-  method: string;
-  cardNumber: string;
-  cardName: string;
-  expiry: string;
-  cvv: string;
-  saveCard: boolean;
-}
+type PaymentMethod = 'CARD' | 'PAYPAL' | 'APPLEPAY';
 
 @Component({
   selector: 'app-checkout',
-  templateUrl: './checkout.component.html'
+  templateUrl: './checkout.component.html',
+  styleUrls: ['./checkout.component.scss']
 })
 export class CheckoutComponent implements OnInit {
-  @ViewChild('checkoutForm') checkoutForm!: NgForm;
 
-  currentStep: number = 0;
-  steps: string[] = ['Shipping', 'Payment', 'Review'];
+  currentStep = 0;
+  steps = ['Cart', 'Payment', 'Confirm'];
 
-  shippingMethods: ShippingMethod[] = [
-    { id: 'standard', name: 'Standard Delivery', price: 5.99, days: '3-5 business days' },
-    { id: 'express', name: 'Express Delivery', price: 12.99, days: '1-2 business days' },
-    { id: 'same-day', name: 'Same Day Delivery', price: 19.99, days: 'Today' }
+  // ─── Cart — loaded from localStorage ─────────────────────
+  cartItems: CartItem[] = [];
+
+  // ─── Payment ─────────────────────────────────────────────
+  selectedMethod: PaymentMethod = 'CARD';
+  cardNumber = '';
+  cardName   = '';
+  expiry     = '';
+  cvv        = '';
+
+  paymentMethods: { id: PaymentMethod; label: string; icon: string }[] = [
+    { id: 'CARD',     label: 'Card',      icon: 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z' },
+    { id: 'PAYPAL',   label: 'PayPal',    icon: 'M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z' },
+    { id: 'APPLEPAY', label: 'Apple Pay', icon: 'M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z' },
   ];
 
-  paymentMethods: PaymentMethod[] = [
-    { id: 'card', name: 'Credit/Debit Card', icon: 'fas fa-credit-card' },
-    { id: 'paypal', name: 'PayPal', icon: 'fab fa-paypal' },
-    { id: 'applepay', name: 'Apple Pay', icon: 'fab fa-apple-pay' }
-  ];
-
-  cartItems: CartItem[] = [
-    { id: 1, name: 'Organic Apples', price: 4.99, quantity: 2, image: 'assets/products/apples.jpg' },
-    { id: 2, name: 'Fresh Spinach', price: 2.99, quantity: 1, image: 'assets/products/spinach.jpg' },
-    { id: 3, name: 'Organic Milk', price: 3.99, quantity: 3, image: 'assets/products/milk.jpg' }
-  ];
-
-  shippingAddress: ShippingAddress = {
-    firstName: '', lastName: '', email: '',
-    address: '', city: '', state: '', zip: '', phone: ''
-  };
-
-  billingAddress: BillingAddress = {
-    sameAsShipping: true, firstName: '', lastName: '',
-    address: '', city: '', state: '', zip: ''
-  };
-
-  paymentInfo: PaymentInfo = {
-    method: 'card', cardNumber: '', cardName: '',
-    expiry: '', cvv: '', saveCard: false
-  };
-
-  selectedShipping: string = 'standard';
-  orderNotes: string = '';
-  isProcessing: boolean = false;
-  orderComplete: boolean = false;
-  orderNumber: string = '';
-  errorMessage: string = '';
-
+  // ─── State ───────────────────────────────────────────────
+  isProcessing = false;
+  orderComplete = false;
+  orderNumber   = '';
+  errorMessage  = '';
 
   constructor(
     private router: Router,
     private orderService: OrderService,
     private authService: AuthService
   ) {}
-  
+
   ngOnInit(): void {
-    this.loadSavedData();
+    const saved = localStorage.getItem('cart');
+    this.cartItems = saved ? JSON.parse(saved) : [];
+
+    // If cart is empty redirect back
+    if (this.cartItems.length === 0) {
+      this.router.navigate(['/cart']);
+    }
   }
 
-  get subtotal(): number {
-    return this.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  }
+  // ─── Totals ──────────────────────────────────────────────
+  get subtotal(): number { return this.cartItems.reduce((s, i) => s + i.price * i.quantity, 0); }
+  get tax(): number      { return this.subtotal * 0.1; }
+  get total(): number    { return this.subtotal + this.tax; }
+  get itemCount(): number { return this.cartItems.reduce((s, i) => s + i.quantity, 0); }
 
-  get shippingCost(): number {
-    const method = this.shippingMethods.find(m => m.id === this.selectedShipping);
-    return method ? method.price : 0;
-  }
-
-  get tax(): number {
-    return this.subtotal * 0.1;
-  }
-
-  get total(): number {
-    return this.subtotal + this.shippingCost + this.tax;
-  }
-
-  nextStep(): void {
-    if (this.isStepValid() && this.currentStep < this.steps.length - 1) {
-      this.saveStepData();
+  // ─── Navigation ──────────────────────────────────────────
+  next(): void {
+    if (this.stepValid && this.currentStep < this.steps.length - 1) {
       this.currentStep++;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 
-  previousStep(): void {
+  back(): void {
     if (this.currentStep > 0) {
       this.currentStep--;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 
-  isStepValid(): boolean {
-    switch (this.currentStep) {
-      case 0: return this.isShippingValid();
-      case 1: return this.isPaymentValid();
-      default: return true;
-    }
-  }
-
-  isShippingValid(): boolean {
-    return !!(
-      this.shippingAddress.firstName &&
-      this.shippingAddress.lastName &&
-      this.shippingAddress.email &&
-      this.shippingAddress.address &&
-      this.shippingAddress.city &&
-      this.shippingAddress.state &&
-      this.shippingAddress.zip
-    );
-  }
-
-  isPaymentValid(): boolean {
-    if (this.paymentInfo.method === 'card') {
-      return !!(
-        this.paymentInfo.cardNumber &&
-        this.paymentInfo.cardName &&
-        this.paymentInfo.expiry &&
-        this.paymentInfo.cvv
-      );
-    }
+  get stepValid(): boolean {
+    if (this.currentStep === 0) return this.cartItems.length > 0;
+    if (this.currentStep === 1 && this.selectedMethod === 'CARD')
+      return !!(this.cardNumber && this.cardName && this.expiry && this.cvv);
     return true;
   }
 
-  saveStepData(): void {
-    const checkoutData = {
-      shippingAddress: this.shippingAddress,
-      billingAddress: this.billingAddress,
-      paymentInfo: this.paymentInfo,
-      selectedShipping: this.selectedShipping,
-      currentStep: this.currentStep
-    };
-    localStorage.setItem('checkoutData', JSON.stringify(checkoutData));
+  // ─── Submit ──────────────────────────────────────────────
+  private toLocalDateTime(): string {
+    return new Date().toISOString().slice(0, 19);
   }
 
-  loadSavedData(): void {
-    const saved = localStorage.getItem('checkoutData');
-    if (saved) {
-      const data = JSON.parse(saved);
-      this.shippingAddress = data.shippingAddress || this.shippingAddress;
-      this.billingAddress = data.billingAddress || this.billingAddress;
-      this.paymentInfo = data.paymentInfo || this.paymentInfo;
-      this.selectedShipping = data.selectedShipping || this.selectedShipping;
-      this.currentStep = data.currentStep || 0;
-    }
-  }
-
-onSubmit(): void {
-    if (this.currentStep !== this.steps.length - 1) return;
-
+  placeOrder(): void {
     this.isProcessing = true;
     this.errorMessage = '';
-    const now = new Date().toISOString();
 
-    const userId = this.authService.getUserId();
-
-    const orderPayload: OrderRequest = {
-      userId: userId,         
+    const payload: OrderRequest = {
+      userId:     this.authService.getUserId(),
       totalPrice: this.total,
-      status: 'PENDING',
-      createdAt: now,
+      status:     'PENDING',
+      createdAt:  this.toLocalDateTime(),
       payment: {
-        amount: this.total,
-        method: this.paymentInfo.method.toUpperCase(),
+        amount:        this.total,
+        method:        this.selectedMethod,
         paymentStatus: 'COMPLETED',
-        paymentDate: now
+        paymentDate:   this.toLocalDateTime(),
       }
     };
 
-    this.orderService.placeOrder(orderPayload).subscribe({
-      next: (response) => {
+    this.orderService.placeOrder(payload).subscribe({
+      next: (res) => {
         this.isProcessing = false;
         this.orderComplete = true;
-        this.orderNumber = 'ORD-' + response.id;
-        localStorage.removeItem('checkoutData');
+        this.orderNumber = 'ORD-' + res.id;
         localStorage.removeItem('cart');
         setTimeout(() => this.router.navigate(['/']), 3000);
       },
       error: (err) => {
         this.isProcessing = false;
         this.errorMessage = 'Failed to place order. Please try again.';
-        console.error('Order error:', err);
+        console.error(err);
       }
     });
   }
 
+  // ─── Formatting ──────────────────────────────────────────
   formatCardNumber(): void {
-    let value = this.paymentInfo.cardNumber.replace(/\D/g, '');
-    let formatted = '';
-    for (let i = 0; i < value.length; i++) {
-      if (i > 0 && i % 4 === 0) formatted += ' ';
-      formatted += value[i];
-    }
-    this.paymentInfo.cardNumber = formatted;
+    const raw = this.cardNumber.replace(/\D/g, '').slice(0, 16);
+    this.cardNumber = raw.match(/.{1,4}/g)?.join(' ') ?? raw;
   }
 
   formatExpiry(): void {
-    let value = this.paymentInfo.expiry.replace(/\D/g, '');
-    if (value.length >= 2) {
-      value = value.slice(0, 2) + '/' + value.slice(2, 4);
-    }
-    this.paymentInfo.expiry = value;
+    const raw = this.expiry.replace(/\D/g, '').slice(0, 4);
+    this.expiry = raw.length >= 3 ? raw.slice(0, 2) + '/' + raw.slice(2) : raw;
   }
-  get selectedShippingMethod(): ShippingMethod | undefined {
-  return this.shippingMethods.find(m => m.id === this.selectedShipping);
-}
 
-get selectedPaymentMethod(): PaymentMethod | undefined {
-  return this.paymentMethods.find(m => m.id === this.paymentInfo.method);
-}
+  getInitials(name: string): string {
+    return name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+  }
 }

@@ -19,6 +19,8 @@ import { ReviewsComponent } from "./components/reviews/reviews.component";
 import { ShopComponent } from "./components/shop/shop.component";
 import { OrderService } from "./services/order.service";
 import { CommonModule } from "@angular/common";
+import { ProductDetailComponent } from "./components/product-details/product-detail.component";
+import { AuthRedirectService } from "./auth/auth.redirect";
 
 
 @NgModule({
@@ -34,6 +36,7 @@ import { CommonModule } from "@angular/common";
     ForumComponent,
     ReviewsComponent,
     DeliveryComponent,
+    ProductDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -56,7 +59,8 @@ import { CommonModule } from "@angular/common";
       useClass: AuthInterceptor,
       multi: true
     },
-    OrderService
+    OrderService,
+    AuthRedirectService
   ],
   bootstrap: [AppComponent]
 })

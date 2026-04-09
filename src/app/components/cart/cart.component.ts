@@ -1,56 +1,60 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Product } from '../../models/product.model';
+
+interface CartItem extends Product { quantity: number; }
 
 @Component({
   selector: 'app-cart',
-  templateUrl: './cart.component.html'
+  templateUrl: './cart.component.html',
+  styleUrls: ['./cart.component.scss']
 })
-export class CartComponent {
-  cartItems = [
-    {
-      id: 1,
-      name: 'Organic Apples',
-      price: 4.99,
-      quantity: 2,
-      image: 'assets/products/apples.jpg'
-    },
-    {
-      id: 2,
-      name: 'Fresh Spinach',
-      price: 2.99,
-      quantity: 1,
-      image: 'assets/products/spinach.jpg'
-    },
-    {
-      id: 3,
-      name: 'Organic Milk',
-      price: 3.99,
-      quantity: 3,
-      image: 'assets/products/milk.jpg'
-    }
-  ];
+export class CartComponent implements OnInit {
 
-  get subtotal() {
-    return this.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  cartItems: CartItem[] = [];
+
+  constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    this.loadCart();
   }
 
-  shipping = 5.99;
-  tax = this.subtotal * 0.1;
-  
-  get total() {
-    return this.subtotal + this.shipping + this.tax;
+  loadCart(): void {
+    const saved = localStorage.getItem('cart');
+    this.cartItems = saved ? JSON.parse(saved) : [];
   }
 
-  updateQuantity(item: any, change: number) {
-    const newQuantity = item.quantity + change;
-    if (newQuantity > 0 && newQuantity <= 10) {
-      item.quantity = newQuantity;
-    }
+  private saveCart(): void {
+    localStorage.setItem('cart', JSON.stringify(this.cartItems));
   }
 
-  removeItem(item: any) {
-    const index = this.cartItems.indexOf(item);
-    if (index > -1) {
-      this.cartItems.splice(index, 1);
-    }
+  updateQuantity(item: CartItem, delta: number): void {
+    const next = item.quantity + delta;
+    if (next < 1) return;
+    if (next > (item.stock ?? 99)) return;
+    item.quantity = next;
+    this.saveCart();
+  }
+
+  removeItem(item: CartItem): void {
+    this.cartItems = this.cartItems.filter(c => c.id !== item.id);
+    this.saveCart();
+  }
+
+  clearCart(): void {
+    this.cartItems = [];
+    this.saveCart();
+  }
+
+  // ─── Totals ──────────────────────────────────────────────
+  get subtotal(): number {
+    return this.cartItems.reduce((s, i) => s + i.price * i.quantity, 0);
+  }
+  get tax(): number      { return this.subtotal * 0.1; }
+  get total(): number    { return this.subtotal + this.tax; }
+  get itemCount(): number { return this.cartItems.reduce((s, i) => s + i.quantity, 0); }
+
+  getInitials(name: string): string {
+    return name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
   }
 }

@@ -10,7 +10,11 @@ export function initializeKeycloak(keycloak: KeycloakService) {
       },
       initOptions: {
         onLoad: 'login-required',   
-        checkLoginIframe: false
-      }
-    });
+        checkLoginIframe: false,
+        
+      },
+        loadUserProfileAtStartUp: true
+
+    }
+  );
 }
