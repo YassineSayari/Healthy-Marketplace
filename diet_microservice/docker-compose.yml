@@ -1,0 +1,7 @@
+services:
+  diet-microservice:
+    build: .
+    ports:
+      - "8008:8008"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
