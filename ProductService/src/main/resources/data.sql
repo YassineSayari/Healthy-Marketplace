@@ -1,7 +1,7 @@
 -- Seed Categories
-INSERT INTO category (id, name, description) VALUES (1, 'Organic Fruits', 'Fresh organic fruits from local farms');
-INSERT INTO category (id, name, description) VALUES (2, 'Dairy & Eggs', 'Premium dairy products and free-range eggs');
-INSERT INTO category (id, name, description) VALUES (3, 'Bakery', 'Freshly baked bread and pastries');
+INSERT INTO category (id, name, description) VALUES (null, 'Organic Fruits', 'Fresh organic fruits from local farms');
+INSERT INTO category (id, name, description) VALUES (null, 'Dairy & Eggs', 'Premium dairy products and free-range eggs');
+INSERT INTO category (id, name, description) VALUES (null, 'Bakery', 'Freshly baked bread and pastries');
 
 -- Seed Products
 INSERT INTO product (name, description, price, stock, category_id) VALUES 
