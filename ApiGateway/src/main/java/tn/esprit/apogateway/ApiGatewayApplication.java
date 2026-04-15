@@ -41,6 +41,11 @@ public class ApiGatewayApplication {
                                 .tokenRelay())
                         .uri("lb://FORUMSERVICE"))
 
+                .route("diet", r -> r.path("/api/MealPlan/**", "/api/NutritionProfile/**")
+                        .filters(f -> f.dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_UNIQUE")
+                                .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_UNIQUE"))
+                        .uri("http://localhost:8008"))
+
                 .route("delivery", r -> r.path("/api/**")
                         .filters(f -> f.dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_UNIQUE")
                                 .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_UNIQUE")
