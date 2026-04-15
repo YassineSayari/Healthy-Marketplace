@@ -27,6 +27,12 @@ export class ForumComponent implements OnInit {
   editTitle = '';
   editContent = '';
 
+  // Report Modal Properties
+  isReportModalOpen = false;
+  reportingItem: { id: number, type: 'FORUM_POST' | 'COMMENT' } | null = null;
+  reportReason = '';
+  reportStep: 'INPUT' | 'SUBMITTING' | 'SUCCESS' | 'ERROR' = 'INPUT';
+
   constructor(
     private forumService: ForumService,
     private reviewReportService: ReviewReportService
@@ -177,29 +183,44 @@ export class ForumComponent implements OnInit {
     return username.slice(0, 2).toUpperCase();
   }
 
-  reportPost(post: Post): void {
-    const reason = prompt('Why are you reporting this post?');
-    if (!reason) return;
+  // --- REPORT MODAL LOGIC ---
+  openReportModal(id: number, type: 'FORUM_POST' | 'COMMENT'): void {
+    this.reportingItem = { id, type };
+    this.reportReason = '';
+    this.reportStep = 'INPUT';
+    this.isReportModalOpen = true;
+  }
+
+  closeReportModal(): void {
+    if (this.reportStep === 'SUBMITTING') return;
+    this.isReportModalOpen = false;
+    this.reportingItem = null;
+  }
+
+  confirmReport(): void {
+    if (!this.reportingItem || !this.reportReason.trim() || this.reportStep === 'SUBMITTING') return;
+
+    this.reportStep = 'SUBMITTING';
     this.reviewReportService.reportContent({
-      contentId: post.id,
-      contentType: 'FORUM_POST',
-      reason: reason
+      contentId: this.reportingItem.id,
+      contentType: this.reportingItem.type,
+      reason: this.reportReason.trim()
     }).subscribe({
-      next: () => alert('Post reported successfully.'),
-      error: () => alert('Failed to report post.')
+      next: () => {
+        this.reportStep = 'SUCCESS';
+        setTimeout(() => this.closeReportModal(), 2000);
+      },
+      error: () => {
+        this.reportStep = 'ERROR';
+      }
     });
   }
 
+  reportPost(post: Post): void {
+    this.openReportModal(post.id, 'FORUM_POST');
+  }
+
   reportComment(post: Post, comment: ForumComment): void {
-    const reason = prompt('Why are you reporting this comment?');
-    if (!reason) return;
-    this.reviewReportService.reportContent({
-      contentId: comment.id,
-      contentType: 'COMMENT',
-      reason: reason
-    }).subscribe({
-      next: () => alert('Comment reported successfully.'),
-      error: () => alert('Failed to report comment.')
-    });
+    this.openReportModal(comment.id, 'COMMENT');
   }
 }

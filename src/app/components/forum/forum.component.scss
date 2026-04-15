@@ -430,6 +430,162 @@ $radius-sm: 8px;
   animation: spin 0.7s linear infinite;
 
   &.spinner-sm { width: 18px; height: 18px; }
+  &.spinner-main { width: 36px; height: 36px; margin: 0 auto; }
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
+
+// ─── Report Modal ──────────────────────────────────────────
+.report-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.report-modal-card {
+  width: 100%;
+  max-width: 440px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  padding: 1.75rem;
+  position: relative;
+  animation: scaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.report-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  background: none;
+  border: none;
+  color: $muted;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: color 0.15s;
+  &:hover { color: $text; }
+}
+
+.report-modal-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+
+  .report-icon-container {
+    width: 48px;
+    height: 48px;
+    background: #fff7ed;
+    color: #f97316;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $text;
+    margin: 0 0 4px;
+  }
+
+  p {
+    font-size: 0.875rem;
+    color: $muted;
+    margin: 0;
+  }
+}
+
+.report-textarea {
+  width: 100%;
+  border: 1.5px solid $border;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 0.93rem;
+  color: $text;
+  outline: none;
+  resize: none;
+  margin-bottom: 1.5rem;
+  transition: all 0.2s;
+
+  &:focus {
+    border-color: #f97316;
+    box-shadow: 0 0 0 4px rgba(#f97316, 0.1);
+  }
+}
+
+.report-modal-actions {
+  display: flex;
+  gap: 12px;
+
+  button {
+    flex: 1;
+    padding: 11px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-secondary {
+    background: #f3f4f6;
+    color: $text;
+    border: none;
+    &:hover { background: #e5e7eb; }
+  }
+
+  .btn-report-submit {
+    background: #f97316;
+    color: white;
+    border: none;
+    &:hover:not(:disabled) { background: #ea580c; }
+    &:disabled { opacity: 0.6; cursor: not-allowed; }
+  }
+}
+
+.report-modal-state {
+  text-align: center;
+  padding: 2rem 0 1rem;
+
+  p {
+    margin-top: 1rem;
+    font-weight: 600;
+    color: $text;
+  }
+
+  .report-status-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    font-size: 1.5rem;
+  }
+
+  &.success {
+    .report-status-icon { background: #f0fdf4; color: #22c55e; }
+    p { color: #16a34a; }
+  }
+
+  &.error {
+    .report-status-icon { background: #fef2f2; color: #ef4444; }
+    p { color: #dc2626; }
+    button { margin-top: 1rem; }
+  }
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes scaleIn { 
+  from { opacity: 0; transform: scale(0.95) translateY(10px); } 
+  to { opacity: 1; transform: scale(1) translateY(0); } 
+}

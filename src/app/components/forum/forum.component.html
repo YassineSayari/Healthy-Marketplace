@@ -220,4 +220,64 @@
     </div>
   </div>
 
+  <!-- Report Modal -->
+  <div *ngIf="isReportModalOpen" class="report-modal-overlay" (click)="closeReportModal()">
+    <div class="report-modal-card" (click)="$event.stopPropagation()">
+      <button class="report-modal-close" (click)="closeReportModal()">✕</button>
+
+      <div class="report-modal-header">
+        <div class="report-icon-container">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </div>
+        <h2>Report Content</h2>
+        <p>Why are you reporting this {{ reportingItem?.type === 'FORUM_POST' ? 'post' : 'comment' }}?</p>
+      </div>
+
+      <div class="report-modal-body" *ngIf="reportStep === 'INPUT'">
+        <textarea
+          class="report-textarea"
+          [(ngModel)]="reportReason"
+          placeholder="Describe the issue (e.g., spam, harassment, inappropriate content...)"
+          rows="4"
+        ></textarea>
+        <div class="report-modal-actions">
+          <button class="btn-secondary" (click)="closeReportModal()">Cancel</button>
+          <button
+            class="btn-report-submit"
+            [disabled]="!reportReason.trim()"
+            (click)="confirmReport()">
+            Submit Report
+          </button>
+        </div>
+      </div>
+
+      <!-- State: Submitting -->
+      <div class="report-modal-state" *ngIf="reportStep === 'SUBMITTING'">
+        <div class="spinner-main"></div>
+        <p>Sending report...</p>
+      </div>
+
+      <!-- State: Success -->
+      <div class="report-modal-state success" *ngIf="reportStep === 'SUCCESS'">
+        <div class="report-status-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <p>Report submitted successfully</p>
+      </div>
+
+      <!-- State: Error -->
+      <div class="report-modal-state error" *ngIf="reportStep === 'ERROR'">
+        <div class="report-status-icon">✕</div>
+        <p>Failed to submit report</p>
+        <button class="btn-secondary" (click)="reportStep = 'INPUT'">Try Again</button>
+      </div>
+
+    </div>
+  </div>
+
 </div>
