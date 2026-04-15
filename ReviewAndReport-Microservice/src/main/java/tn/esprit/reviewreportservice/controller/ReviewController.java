@@ -6,9 +6,13 @@ import tn.esprit.reviewreportservice.entity.Review;
 import tn.esprit.reviewreportservice.service.ReviewService;
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/reviews")
 @CrossOrigin("*")
+@Tag(name = "Review Management", description = "Endpoints for managing product and forum reviews")
 public class ReviewController {
 
     @Autowired
@@ -18,17 +22,20 @@ public class ReviewController {
     private tn.esprit.reviewreportservice.client.ProductRestClient productRestClient;
 
     @PostMapping
+    @Operation(summary = "Add a new review", description = "Creates a new review")
     public Review addReview(@RequestBody Review review) {
         return reviewService.addReview(review);
     }
 
     @GetMapping("/product/{productId}")
+    @Operation(summary = "Get reviews by product ID", description = "Retrieves all reviews associated with a specific product")
     public List<Review> getReviewsByProduct(@PathVariable Long productId) {
         return reviewService.getReviewsByProduct(productId);
     }
 
     // test openfeign
     @GetMapping("/product/{productId}/details")
+    @Operation(summary = "Get product details with reviews", description = "Retrieves product information from ProductService and its related reviews")
     public Object getProductDetailsWithReviews(@PathVariable Long productId) {
         tn.esprit.reviewreportservice.dto.ProductDTO product = null;
         try {
@@ -49,6 +56,7 @@ public class ReviewController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete a review", description = "Deletes an existing review by its ID")
     public void deleteReview(@PathVariable Long id) {
         reviewService.deleteReview(id);
     }

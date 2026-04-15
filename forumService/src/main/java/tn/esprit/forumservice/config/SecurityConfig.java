@@ -1,5 +1,6 @@
 package tn.esprit.forumservice.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -14,6 +15,9 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
+
+    @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")
+    private String jwkSetUri;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -33,8 +37,6 @@ public class SecurityConfig {
     @Bean
     public JwtDecoder jwtDecoder() {
         RestTemplate restTemplate = new RestTemplate();
-        return NimbusJwtDecoder.withJwkSetUri(
-                "http://localhost:9090/realms/healthy-market-realm/protocol/openid-connect/certs"
-        ).restOperations(restTemplate).build();
+        return NimbusJwtDecoder.withJwkSetUri(jwkSetUri).restOperations(restTemplate).build();
     }
 }
