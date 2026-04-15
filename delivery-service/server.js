@@ -3,12 +3,18 @@ const app = require('./app');
 const connectDB = require('./src/config/db_connect');
 const eurekaClient = require('./src/config/eureka_client');
 const config = require('./src/config/config');
+const fetchConfig = require('./src/config/config_fetcher');
 
 const startServer = async () => {
     try {
+        const remoteConfig = await fetchConfig();
+        // Merge remote config into environment variables or use it directly
+        const PORT = remoteConfig['server.port'] || config.port || 3000;
+        const MONGO_URI = remoteConfig['spring.data.mongodb.uri'] || config.mongoUri;
+        
+        process.env.MONGO_URI = MONGO_URI; // Set it for other modules
+        
         await connectDB();
-
-        const PORT = config.port || 3000;
         app.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
             if (config.eureka.enabled === 'true' || config.eureka.enabled === true) {

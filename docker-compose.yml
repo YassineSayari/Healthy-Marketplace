@@ -203,6 +203,37 @@ services:
       - healthy-market-network
     restart: unless-stopped
 
+  delivery-db:
+    image: mongo:latest
+    container_name: delivery-db
+    ports:
+      - "27018:27017"
+    volumes:
+      - delivery_data:/data/db
+    networks:
+      - healthy-market-network
+
+  delivery-service:
+    build:
+      context: ./delivery-service
+    container_name: delivery-service
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - MONGO_URI=mongodb://delivery-db:27017/delivery_db
+      - EUREKA_HOST=eureka-server
+      - EUREKA_PORT=8761
+      - EUREKA_ENABLED=true
+      - CONFIG_SERVER_URL=http://config-server:8889
+      - EUREKA_INSTANCE_HOSTNAME=delivery-service
+    depends_on:
+      - eureka-server
+      - delivery-db
+      - config-server
+    networks:
+      - healthy-market-network
+
   diet-service:
     build:
       context: ./diet_microservice
@@ -241,3 +272,4 @@ networks:
 
 volumes:
   postgres_data:
+  delivery_data:
