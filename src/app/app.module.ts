@@ -1,6 +1,6 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { NgModule, APP_INITIALIZER } from "@angular/core";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { KeycloakService } from "keycloak-angular";
 import { AppRoutingModule } from "./app-routing.module";
@@ -21,6 +21,8 @@ import { OrderService } from "./services/order.service";
 import { CommonModule } from "@angular/common";
 import { ProductDetailComponent } from "./components/product-details/product-detail.component";
 import { AuthRedirectService } from "./auth/auth.redirect";
+import { NutritionProfileComponent } from "./components/nutrition-profile/nutrition-profile.component";
+import { MealPlanComponent } from "./components/meal-plan/meal-plan.component";
 
 
 @NgModule({
@@ -42,8 +44,11 @@ import { AuthRedirectService } from "./auth/auth.redirect";
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
      HttpClientModule,
-     CommonModule
+     CommonModule,
+     NutritionProfileComponent,
+     MealPlanComponent
     
   ],
    providers: [
