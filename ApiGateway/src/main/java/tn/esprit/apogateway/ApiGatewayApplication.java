@@ -24,6 +24,14 @@ public class ApiGatewayApplication {
                                 .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_UNIQUE"))
                         .uri("lb://PRODUCTSERVICE"))
 
+                .route("diet", r -> r.path("/api/NutritionProfile/**", "/api/MealPlan/**")
+                        .filters(f -> f.tokenRelay())
+                        .uri("lb://DIETSERVICE"))
+                .route("review", r -> r.path("/api/reports/**", "/api/reviews/**")
+                        .filters(f -> f.dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_UNIQUE")
+                                .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_UNIQUE"))
+                        .uri("lb://ORDERSERVICE"))
+
                 .route("orders", r -> r.path("/api/orders/**", "/api/payments/**")
                         .filters(f -> f.dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_UNIQUE")
                                 .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_UNIQUE"))
@@ -40,11 +48,6 @@ public class ApiGatewayApplication {
                                 .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_UNIQUE")
                                 .tokenRelay())
                         .uri("lb://FORUMSERVICE"))
-
-                .route("diet", r -> r.path("/api/MealPlan/**", "/api/NutritionProfile/**")
-                        .filters(f -> f.dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_UNIQUE")
-                                .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_UNIQUE"))
-                        .uri("http://localhost:8008"))
 
                 .route("delivery", r -> r.path("/api/**")
                         .filters(f -> f.dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_UNIQUE")

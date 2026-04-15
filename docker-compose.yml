@@ -135,6 +135,24 @@ services:
     networks:
       - healthy-market-network
 
+  diet-service:
+    build:
+      context: ./diet_microservice
+    container_name: diet-service
+    ports:
+      - "8085:8008"
+    environment:
+      - EUREKA_SERVER_URL=http://eureka-server:8761/eureka/
+      - KEYCLOAK_URL=http://keycloak:8080
+    depends_on:
+      eureka-server:
+        condition: service_started
+      keycloak:
+        condition: service_started
+    restart: always
+    networks:
+      - healthy-market-network
+
   # [Space reserved for other microservices (Order, Delivery)]
 
 networks:

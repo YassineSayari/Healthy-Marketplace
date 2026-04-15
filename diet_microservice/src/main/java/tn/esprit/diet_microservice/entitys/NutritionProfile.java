@@ -16,7 +16,7 @@ public class NutritionProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long userId;
+    private String userId;
     private Double weight;
     private Double height;
     private Integer age;

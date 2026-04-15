@@ -6,5 +6,5 @@ import tn.esprit.diet_microservice.entitys.NutritionProfile;
 import java.util.List;
 
 public interface NutritionProfileRepository extends JpaRepository<NutritionProfile, Long> {
-    List<NutritionProfile> findByUserId(Long userId);
+    List<NutritionProfile> findByUserId(String userId);
 }

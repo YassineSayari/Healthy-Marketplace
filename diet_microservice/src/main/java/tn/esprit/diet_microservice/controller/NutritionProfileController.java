@@ -33,7 +33,7 @@ public class NutritionProfileController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<NutritionProfile>> getByUserId(@PathVariable Long userId) {
+    public ResponseEntity<List<NutritionProfile>> getByUserId(@PathVariable String userId) {
         return ResponseEntity.ok()
                 .header("Content-Type", "application/json")
                 .body(service.getByUserId(userId));

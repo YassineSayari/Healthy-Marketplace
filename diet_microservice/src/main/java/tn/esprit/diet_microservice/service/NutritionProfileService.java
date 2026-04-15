@@ -22,7 +22,7 @@ public class NutritionProfileService {
                 .orElseThrow(() -> new RuntimeException("NutritionProfile not found with id: " + id));
     }
 
-    public List<NutritionProfile> getByUserId(Long userId) {
+    public List<NutritionProfile> getByUserId(String userId) {
         return repo.findByUserId(userId);
     }
 
