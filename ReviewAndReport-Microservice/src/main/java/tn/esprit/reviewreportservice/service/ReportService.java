@@ -26,4 +26,8 @@ public class ReportService {
         report.setStatus(status);
         return reportRepository.save(report);
     }
+
+    public void deleteReport(Long id) {
+        reportRepository.deleteById(id);
+    }
 }

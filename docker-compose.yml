@@ -77,7 +77,8 @@ services:
     ports:
       - "8889:8889"
     environment:
-      - EUREKA_SERVER_URL=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - CONFIG_SERVER_URL=http://config-server:8889
     depends_on:
       - eureka-server
     networks:
@@ -103,7 +104,8 @@ services:
     ports:
       - "8888:8888"
     environment:
-      - EUREKA_SERVER_URL=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - CONFIG_SERVER_URL=http://config-server:8889
       - KEYCLOAK_URL=http://keycloak:8080
     depends_on:
       - eureka-server
@@ -141,7 +143,8 @@ services:
     ports:
       - "8006:8006"
     environment:
-      - EUREKA_SERVER_URL=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - CONFIG_SERVER_URL=http://config-server:8889
       - KEYCLOAK_URL=http://keycloak:8080
       - SPRING_DATASOURCE_URL=jdbc:mysql://forum-db:3306/forum_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root
@@ -164,7 +167,8 @@ services:
     ports:
       - "8083:8083"
     environment:
-      - EUREKA_SERVER_URL=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - CONFIG_SERVER_URL=http://config-server:8889
       - KEYCLOAK_URL=http://keycloak:8080
       - SPRING_DATASOURCE_URL=jdbc:mysql://product-db:3306/product_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root
@@ -187,7 +191,8 @@ services:
     ports:
       - "8082:8082"
     environment:
-      - EUREKA_SERVER_URL=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - CONFIG_SERVER_URL=http://config-server:8889
       - KEYCLOAK_URL=http://keycloak:8080
       - SPRING_DATASOURCE_URL=jdbc:mysql://order-db:3306/orders_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root
@@ -241,7 +246,8 @@ services:
     ports:
       - "8008:8008"
     environment:
-      - EUREKA_SERVER_URL=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - CONFIG_SERVER_URL=http://config-server:8889
       - KEYCLOAK_URL=http://keycloak:8080
     depends_on:
       - eureka-server
@@ -257,11 +263,25 @@ services:
     ports:
       - "8084:8084"     # Changed to avoid conflict
     environment:
-      - EUREKA_SERVER_URL=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - CONFIG_SERVER_URL=http://config-server:8889
       - KEYCLOAK_URL=http://keycloak:8080
     depends_on:
       - eureka-server
       - config-server
+    networks:
+      - healthy-market-network
+    restart: unless-stopped
+
+
+  frontend:
+    build:
+      context: ../front/Healthy-Marketplace
+    container_name: frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - apigateway
     networks:
       - healthy-market-network
     restart: unless-stopped

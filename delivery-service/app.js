@@ -3,7 +3,7 @@ const cors = require('cors');
 
 const app = express();
 
-app.use(cors());
+// cors() removed to prevent duplicate headers alongside ApiGateway
 app.use(express.json());
 
 const deliveryRoutes = require('./src/routes/deliveryRoute');

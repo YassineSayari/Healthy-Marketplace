@@ -59,4 +59,10 @@ public class ReportController {
     public Report updateReportStatus(@PathVariable Long id, @RequestParam ReportStatus status) {
         return reportService.updateReportStatus(id, status);
     }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete report", description = "Delete a report by its ID")
+    public void deleteReport(@PathVariable Long id) {
+        reportService.deleteReport(id);
+    }
 }

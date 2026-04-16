@@ -25,7 +25,7 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)   // Gateway handles CORS
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/actuator/**").permitAll()
+                        .requestMatchers("/actuator/**", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
@@ -35,6 +35,9 @@ public class SecurityConfig {
         return http.build();
     }
 
+    @org.springframework.beans.factory.annotation.Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")
+    private String jwkSetUri;
+
     @Bean
     public JwtDecoder jwtDecoder() {
         RestTemplate restTemplate = new RestTemplate();
@@ -43,10 +46,7 @@ public class SecurityConfig {
             return execution.execute(request, body);
         });
 
-        // Better way without builder (using default + custom if needed)
-        return NimbusJwtDecoder.withJwkSetUri(
-                        "http://localhost:9090/realms/healthy-market-realm/protocol/openid-connect/certs"
-                )
+        return NimbusJwtDecoder.withJwkSetUri(jwkSetUri)
                 .restOperations(restTemplate)
                 .build();
     }

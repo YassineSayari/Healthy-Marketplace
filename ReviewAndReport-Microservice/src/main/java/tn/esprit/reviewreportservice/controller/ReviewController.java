@@ -33,6 +33,12 @@ public class ReviewController {
         return reviewService.getReviewsByProduct(productId);
     }
 
+    @GetMapping
+    @Operation(summary = "Get all reviews", description = "Retrieves all reviews")
+    public List<Review> getAllReviews() {
+        return reviewService.getAllReviews();
+    }
+
     // test openfeign
     @GetMapping("/product/{productId}/details")
     @Operation(summary = "Get product details with reviews", description = "Retrieves product information from ProductService and its related reviews")

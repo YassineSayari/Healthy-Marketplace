@@ -16,7 +16,7 @@ public class Review {
 
     private Long productId;
 
-    private Long userId;
+    private String userId;
 
     private LocalDateTime createdAt;
 
@@ -57,11 +57,11 @@ public class Review {
         this.productId = productId;
     }
 
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

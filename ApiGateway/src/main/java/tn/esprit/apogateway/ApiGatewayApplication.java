@@ -27,14 +27,10 @@ public class ApiGatewayApplication {
                 .route("diet", r -> r.path("/api/NutritionProfile/**", "/api/MealPlan/**")
                         .filters(f -> f.tokenRelay())
                         .uri("lb://DIETSERVICE"))
-                .route("review", r -> r.path("/api/reports/**", "/api/reviews/**")
-                        .filters(f -> f.dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_UNIQUE")
-                                .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_UNIQUE"))
-                        .uri("lb://ORDERSERVICE"))
-
                 .route("orders", r -> r.path("/api/orders/**", "/api/payments/**")
                         .filters(f -> f.dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_UNIQUE")
-                                .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_UNIQUE"))
+                                .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_UNIQUE")
+                                .tokenRelay())
                         .uri("lb://ORDERSERVICE"))
 
                 .route("reviewandreports", r -> r.path("/api/reviews/**", "/api/reports/**", "/REVIEWREPORTSERVICE/**")
@@ -49,17 +45,27 @@ public class ApiGatewayApplication {
                                 .tokenRelay())
                         .uri("lb://FORUMSERVICE"))
 
-                .route("delivery", r -> r.path("/api/**")
+                .route("delivery", r -> r.path("/api/v1/deliveries/**")
                         .filters(f -> f.dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_UNIQUE")
                                 .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_UNIQUE")
                                 .tokenRelay())
                         .uri("lb://DELIVERY-SERVICE"))
+                .route("product-openapi", r -> r.path("/v3/api-docs/product")
+                        .filters(f -> f.rewritePath("/v3/api-docs/product", "/v3/api-docs"))
+                        .uri("lb://PRODUCTSERVICE"))
+                .route("order-openapi", r -> r.path("/v3/api-docs/order")
+                        .filters(f -> f.rewritePath("/v3/api-docs/order", "/v3/api-docs"))
+                        .uri("lb://ORDERSERVICE"))
+                .route("forum-openapi", r -> r.path("/v3/api-docs/forum")
+                        .filters(f -> f.rewritePath("/v3/api-docs/forum", "/v3/api-docs"))
+                        .uri("lb://FORUMSERVICE"))
+                .route("reviewreport-openapi", r -> r.path("/v3/api-docs/reviewreport")
+                        .filters(f -> f.rewritePath("/v3/api-docs/reviewreport", "/v3/api-docs"))
+                        .uri("lb://REVIEWREPORTSERVICE"))
+                .route("diet-openapi", r -> r.path("/v3/api-docs/diet")
+                        .filters(f -> f.rewritePath("/v3/api-docs/diet", "/v3/api-docs"))
+                        .uri("lb://DIETSERVICE"))
                 .build();
-    }
-
-    @Bean
-    public DedupeResponseHeaderGatewayFilterFactory dedupeResponseHeaderGatewayFilterFactory() {
-        return new DedupeResponseHeaderGatewayFilterFactory();
     }
 
 }
