@@ -42,6 +42,10 @@ export class ReviewReportService {
     return this.http.delete<void>(`${this.apiUrl}/reviews/${id}`);
   }
 
+  getAllReviews(): Observable<Review[]> {
+    return this.http.get<Review[]>(`${this.apiUrl}/reviews`);
+  }
+
   // Report Endpoints
   reportContent(report: Report): Observable<Report> {
     return this.http.post<Report>(`${this.apiUrl}/reports`, report);
@@ -49,5 +53,9 @@ export class ReviewReportService {
 
   getAllReports(): Observable<Report[]> {
     return this.http.get<Report[]>(`${this.apiUrl}/reports`);
+  }
+
+  deleteReport(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/reports/${id}`);
   }
 }

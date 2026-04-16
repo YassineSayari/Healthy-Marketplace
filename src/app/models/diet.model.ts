@@ -1,6 +1,6 @@
 export interface NutritionProfile {
   id?: number;
-  userId: number;
+  userId: string;
   weight: number;
   height: number;
   age: number;

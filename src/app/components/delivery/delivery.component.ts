@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DeliveryService } from '../../services/delivery.service';
 
 @Component({
   selector: 'app-delivery',
@@ -46,26 +47,60 @@ export class DeliveryComponent implements OnInit {
 
   trackingNumber: string = '';
   trackingResult: any = null;
+  deliveries: any[] = [];
+  loading: boolean = false;
+  error: string | null = null;
 
-  constructor() { }
+  constructor(private deliveryService: DeliveryService) { }
 
   ngOnInit(): void {
-    // Initialize any data or subscriptions
+    this.loadAllDeliveries();
+  }
+
+  loadAllDeliveries(): void {
+    this.loading = true;
+    this.deliveryService.getAllDeliveries().subscribe({
+      next: (data) => {
+        this.deliveries = data;
+        this.loading = false;
+      },
+      error: (err) => {
+        this.error = 'Failed to load deliveries';
+        this.loading = false;
+        console.error(err);
+      }
+    });
   }
 
   trackOrder(): void {
     if (this.trackingNumber) {
-      // Simulate API call to track order
-      this.trackingResult = {
-        status: 'In Transit',
-        location: 'Distribution Center',
-        estimatedDelivery: 'Tomorrow, 2:00 PM',
-        updates: [
-          { time: '2 hours ago', description: 'Package arrived at distribution center' },
-          { time: '5 hours ago', description: 'Package departed from sorting facility' },
-          { time: '1 day ago', description: 'Order confirmed and processed' }
-        ]
-      };
+      this.loading = true;
+      this.error = null;
+      this.deliveryService.getDeliveryById(this.trackingNumber).subscribe({
+        next: (delivery) => {
+          this.deliveryService.getTrackingHistory(delivery._id!).subscribe({
+            next: (history) => {
+              this.trackingResult = {
+                ...delivery,
+                updates: history.map(h => ({
+                  time: h.timestamp,
+                  description: h.description
+                }))
+              };
+              this.loading = false;
+            },
+            error: (err) => {
+              this.trackingResult = delivery; // Show delivery at least
+              this.loading = false;
+            }
+          });
+        },
+        error: (err) => {
+          this.error = 'Delivery not found or tracking number invalid';
+          this.loading = false;
+          this.trackingResult = null;
+        }
+      });
     }
   }
 

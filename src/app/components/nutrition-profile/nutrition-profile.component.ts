@@ -54,11 +54,9 @@ export class NutritionProfileComponent implements OnInit {
     }
   }
 
-  getCurrentUserId(): number | null {
-    // This depends on how you store user ID in Keycloak
-    // You might need to adjust this based on your Keycloak setup
+  getCurrentUserId(): string | null {
     const token = this.keycloakService.getKeycloakInstance().tokenParsed;
-    return token && token.sub ? parseInt(token.sub) : null;
+    return token && token.sub ? token.sub : null;
   }
 
   onSubmit(): void {

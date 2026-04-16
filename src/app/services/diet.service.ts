@@ -20,7 +20,7 @@ export class DietService {
     return this.http.get<NutritionProfile>(`${this.baseUrl}/NutritionProfile/${id}`);
   }
 
-  getNutritionProfilesByUserId(userId: number): Observable<NutritionProfile[]> {
+  getNutritionProfilesByUserId(userId: string): Observable<NutritionProfile[]> {
     return this.http.get<NutritionProfile[]>(`${this.baseUrl}/NutritionProfile/user/${userId}`);
   }
 
